@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { useHelloCelo } from "./useHelloCelo";
 import TransactionHistory from "./TransactionHistory";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function App() {
   const [msg, setMsg] = useState("");
   const [input, setInput] = useState("");
   const [status, setStatus] = useState("");
   const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { getMessage, setMessage } = useHelloCelo();
 
   async function fetchMsg() {
@@ -16,9 +19,10 @@ export default function App() {
 
   async function updateMsg() {
     try {
-      setStatus("Sending transaction...");
+      setLoading(true);
+      toast.info("Sending transaction...", { autoClose: 2000 });
       await setMessage(input);
-      setStatus("Transaction confirmed ✅");
+      toast.success("Transaction confirmed ✅", { autoClose: 3000 });
       fetchMsg(); // refresh message
       setHistory([
         { message: input, timestamp: new Date().toLocaleTimeString() },
@@ -27,7 +31,9 @@ export default function App() {
       setInput("");
     } catch (err) {
       console.error(err);
-      setStatus("Transaction failed ❌");
+      toast.error("Transaction failed ❌", { autoClose: 3000 });
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -42,9 +48,12 @@ export default function App() {
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
-      <button onClick={updateMsg}>Update Message</button>
-      <p>{status}</p>
+      <button onClick={updateMsg} disabled={loading}>
+        {loading ? '⏳ Sending...' : 'Update Message'}
+      </button>
+      {loading && <p style={{ color: '#f59e0b' }}>⏳ Transaction pending...</p>}
       <TransactionHistory history={history} />
+      <ToastContainer position="top-right" />
     </div>
   );
 }
