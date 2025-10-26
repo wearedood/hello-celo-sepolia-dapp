@@ -48,10 +48,22 @@ export default function App() {
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
-      <button onClick={updateMsg} disabled={loading}>
+      <button 
+        onClick={updateMsg} 
+        disabled={loading}
+        style={{
+          padding: '10px 20px',
+          backgroundColor: loading ? '#9ca3af' : '#2563eb',
+          color: 'white',
+          border: 'none',
+          borderRadius: '6px',
+          cursor: loading ? 'not-allowed' : 'pointer',
+          fontSize: '16px'
+        }}
+      >
         {loading ? '⏳ Sending...' : 'Update Message'}
       </button>
-      {loading && <p style={{ color: '#f59e0b' }}>⏳ Transaction pending...</p>}
+      {loading && <p style={{ color: '#f59e0b', fontWeight: 'bold', marginTop: '10px' }}>⏳ Transaction pending...</p>}
       <TransactionHistory history={history} />
       <ToastContainer position="top-right" />
     </div>
