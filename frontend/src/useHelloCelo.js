@@ -8,11 +8,9 @@ const CONTRACT_ABI = [
 export function useHelloCelo() {
   async function getMessage() {
     if (!window.ethereum) return "No wallet detected.";
-
     const provider = new ethers.BrowserProvider(window.ethereum);
     const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
-    return contract.message();
+    return await contract.message();
   }
-
   return { getMessage };
 }
