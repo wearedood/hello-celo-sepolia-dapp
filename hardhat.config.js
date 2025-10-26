@@ -1,6 +1,13 @@
-require("@nomicfoundation/hardhat-toolbox");
+require("@nomiclabs/hardhat-ethers");
+require("dotenv").config();
 
-/** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: "0.8.20",
+  networks: {
+    celo: {
+      url: "https://forno-sepolia.celo-testnet.org/",
+      accounts: [process.env.PRIVATE_KEY],
+      chainId: 44787
+    }
+  }
 };
